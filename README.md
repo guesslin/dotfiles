@@ -14,4 +14,4 @@ INSTALLATION
 ============
 
 1. Pre-install for git, vim with python support, and tmux
-2. run `./setup`
+2. run `./setup.sh`
