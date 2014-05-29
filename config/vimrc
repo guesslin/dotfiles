@@ -1,0 +1,173 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Required for Vundle
+Plugin 'gmarik/Vundle.vim'
+
+" List of All vim plugins you need
+Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/nerdtree'
+Plugin 'klen/python-mode'
+
+" All of your Plugins must be added before the following line
+call vundle#end()
+
+" General VIMRC
+
+filetype plugin indent on
+syntax on
+
+set autoindent
+set encoding=utf-8
+set foldlevelstart=0
+set laststatus=2
+set modeline
+set number
+set showtabline=2
+set t_Co=256
+
+let mapleader=","
+let maplocalleader="\\"
+colorscheme wombat256
+
+" Vim Statusline --------------- {{{
+set statusline=%f
+set statusline+=\ %y
+set statusline+=%=
+set statusline+=%l
+set statusline+=,
+set statusline+=%c
+set statusline+=:
+set statusline+=%L
+set statusline+=\[%p%%\]
+" }}}
+
+
+" Global Key Mapping ---------------- {{{
+
+" Key map with leader key
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lbl
+nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lbl
+nnoremap <leader>U viwU<esc>
+nnoremap <leader>u viwu<esc>
+
+" normal key map
+nnoremap <space> za
+nnoremap <F7> :set ignorecase!<cr>
+nnoremap <F8> :TagbarToggle<cr>
+
+" }}}
+
+
+" Autocmd Groups -------------------- {{{
+
+" Autocmd Group for python ---------- {{{
+augroup filetype_python
+    autocmd!
+    autocmd BufRead,BufNewFile *.py set filetype=python
+    autocmd FileType python TagbarOpen
+    autocmd FileType python set tabstop=4
+    autocmd FileType python set shiftwidth=4
+    autocmd FileType python set expandtab
+    autocmd FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+    autocmd FileType python :call CheckAndLoadTags()
+    autocmd FileType python TagbarOpen
+    autocmd FileType python iabbrev pythonHead #!/usr/bin/env python<cr># -*- coding: utf-8 -*-<cr>
+augroup END
+" }}}
+
+" Autocmd Group for markdown ---------- {{{
+augroup filetype_markdown
+    autocmd!
+    autocmd BufRead,BufNewFile *.md set ft=mkd
+    autocmd BufRead,BufNewFile *.mkd set ft=mkd
+    autocmd FileType mkd onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
+    autocmd FileType mkd onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+augroup END
+" }}}
+
+" Autocmd Group for Vimscript file setting ----------------------- {{{
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType vim inoreabbrev == ==#
+augroup END
+" }}}
+
+" Autocmd Group for arduion pde ---------- {{{
+augroup filetype_pde
+    autocmd!
+augroup END
+" }}}
+
+" Autocmd Group for Nmap NSE script --------------------- {{{
+augroup FileType_nse
+    autocmd!
+    autocmd BufRead,BufNewFile *.nse set filetype=lua
+augroup END
+" }}}
+
+" Autocmd Group for YARA ---------------------{{{
+augroup FileType_Yara
+    autocmd!
+    autocmd BufNewFile,BufRead *.yara set filetype=yara
+augroup END
+" }}}
+
+" Autocmd Group for golang --------------------{{{
+augroup FileType_GO
+    autocmd!
+    autocmd BufRead,BufNewFile *.go set filetype=go
+    autocmd FileType go set noexpandtab
+    autocmd FileType go set tabstop=8
+    autocmd FileType go :call CheckAndLoadTags()
+    autocmd FileType go let g:tagbar_type_go = {
+        \ 'ctagstype' : 'go',
+        \ 'kinds'     : [
+            \ 'p:package',
+            \ 'i:imports:1',
+            \ 'c:constants',
+            \ 'v:variables',
+            \ 't:types',
+            \ 'n:interfaces',
+            \ 'w:fields',
+            \ 'e:embedded',
+            \ 'm:methods',
+            \ 'r:constructor',
+            \ 'f:functions'
+        \ ],
+        \ 'sro' : '.',
+        \ 'kind2scope' : {
+            \ 't' : 'ctype',
+            \ 'n' : 'ntype'
+        \ },
+        \ 'scope2kind' : {
+            \ 'ctype' : 't',
+            \ 'ntype' : 'n'
+        \ },
+        \ 'ctagsbin'  : 'gotags',
+        \ 'ctagsargs' : '-sort -silent'
+        \ }
+augroup END
+" }}}
+
+" }}}
+
+
+" User defined Functions ------------- {{{
+
+" Function CheckAndLoadTags ---------- {{{
+function! CheckAndLoadTags()
+    if file_readable("./tags")
+        set tag=tags
+    endif
+endfunction
+" }}}
+
+" }}}
