@@ -61,14 +61,14 @@ if [ ! -e "$1" ]; then
     mkdir -p $1
 fi
 echo -e "Backup old dotfile to $1"
-cp ~/.vimrc "$1/"
-cp ~/.tmux.conf "$1/"
+cp $HOME/.vimrc "$1/"
+cp $HOME/.tmux.conf "$1/"
 }
 
 function install() {
 echo -e "Copy dotfiles"
-cp ./config/vimrc ~/.vimrc
-cp ./config/tmux.conf ~/.tmux.conf
+cp ./config/vimrc $HOME/.vimrc
+cp ./config/tmux.conf $HOME/.tmux.conf
 }
 
 quiet=0
@@ -97,8 +97,7 @@ if [ "$quiet" == 0 ]; then
     banner
 fi
 if [ -z "$backup" ]; then
-    backup="/home/$USERNAME/.backup"
+    backup="$HOME/.backup"
 fi
-echo -e "$backup"
 backup_old $backup
 install
