@@ -26,6 +26,7 @@ OPTIONS:
         Default: ~/.backup
 
   -c    show colours if front
+  -p	show banner only
 
 EOF
 }
@@ -73,7 +74,7 @@ cp ./config/tmux.conf $HOME/.tmux.conf
 
 quiet=0
 backup=
-while getopts "hqb:c" OPTION
+while getopts "hqpb:c" OPTION
 do
     case $OPTION in
         h)
@@ -90,6 +91,10 @@ do
             show_colours
             exit 1
             ;;
+	p)
+	    banner
+	    exit 1
+	    ;;
 
     esac
 done
