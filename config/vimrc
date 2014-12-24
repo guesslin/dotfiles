@@ -21,6 +21,12 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/nerdtree'
 Plugin 'klen/python-mode'
+Plugin 'mbriggs/mark.vim'
+Plugin 'fatih/vim-go'
+Plugin 'scrooloose/syntastic'
+Plugin 'rjohnsondev/vim-compiler-go'
+Plugin 'dgryski/vim-godef'
+Plugin 'vim-jp/vim-go-extra'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -88,6 +94,7 @@ augroup filetype_python
     autocmd FileType python :call CheckAndLoadTags()
     autocmd FileType python TagbarOpen
     autocmd FileType python iabbrev pythonHead #!/usr/bin/env python<cr># -*- coding: utf-8 -*-<cr>
+    autocmd FileType python let g:pymode_rope_lookup_project = 0
 augroup END
 " }}}
 
@@ -104,6 +111,7 @@ augroup END
 " Autocmd Group for Vimscript file setting ----------------------- {{{
 augroup filetype_vim
     autocmd!
+    autocmd BufRead,BufNewFile *.vim set filetype=vim
     autocmd FileType vim setlocal foldmethod=marker
     autocmd FileType vim inoreabbrev == ==#
 augroup END
@@ -126,6 +134,11 @@ augroup END
 augroup FileType_Yara
     autocmd!
     autocmd BufNewFile,BufRead *.yara set filetype=yara
+    autocmd BufNewFile,BufRead *.yar set filetype=yara
+    autocmd FileType yara set tabstop=4
+    autocmd FileType yara set shiftwidth=4
+    autocmd FileType yara set expandtab
+    autocmd FileType yara set smartindent cinwords=strings:,condition:
 augroup END
 " }}}
 
@@ -163,6 +176,16 @@ augroup FileType_GO
         \ 'ctagsbin'  : 'gotags',
         \ 'ctagsargs' : '-sort -silent'
         \ }
+augroup END
+" }}}
+
+" Autocmd Group for ASM ----------------------{{{
+augroup FileType_ASM
+    autocmd!
+    autocmd BufRead,BufNewFile *.asm set filetype=asm
+    autocmd FileType asm colorscheme murphy
+    autocmd FileType asm set tabstop=8
+    autocmd FileType asm set noexpandtab
 augroup END
 " }}}
 
