@@ -6,7 +6,7 @@ A repo for all my dot file configuratioin
 REQUIREMENTS
 ============
 
-* tmux version >= 1.8
+* tmux version >= 1.9
 * vim, with python support, version >= 7.3
 * git
 
