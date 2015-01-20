@@ -16,3 +16,7 @@
 [color]
     status = always
     ui = true
+[fetch]
+    prune = true
+[commit]
+    template = $HOME/.config/.gitmessage.txt
