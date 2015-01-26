@@ -69,8 +69,14 @@ cp $HOME/.tmux.conf "$1/"
 function install() {
 echo -e "Copy dotfiles"
 cp ./config/vimrc $HOME/.vimrc
+mkdir -p $HOME/.vim/colors
+ln -sf ./config/vim/colors/wombat256.vim/colors/wombat256mod.vim $HOME/.vim/colors/wombat256.vim
 cp ./config/tmux.conf $HOME/.tmux.conf
+cp ./config/gitconfig $HOME/.gitconfig
+mkdir -p $HOME/.config/
+cp ./config/git/git_commit_template.txt $HOME/.config/.gitmessage.txt
 }
+
 
 quiet=0
 backup=
@@ -104,5 +110,6 @@ fi
 if [ -z "$backup" ]; then
     backup="$HOME/.backup"
 fi
+git submodule update
 backup_old $backup
 install
