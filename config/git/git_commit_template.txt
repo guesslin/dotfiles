@@ -2,3 +2,5 @@
 # [ FOLLOW BLINK LINE DO NOT REMOVE IT ]
 
 # [ Description: what happened and why this happened as more detail as possible]
+
+# [ Subject types: Add, Fix, Docs, Alt(er), Remove]

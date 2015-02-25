@@ -70,6 +70,8 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lbl
 nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lbl
+nnoremap <leader>l" ^i"<esc>$a"<esc>^
+nnoremap <leader>l' ^i'<esc>$a'<esc>^
 nnoremap <leader>U viwU<esc>
 nnoremap <leader>u viwu<esc>
 
