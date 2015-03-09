@@ -117,6 +117,9 @@ augroup filetype_vim
     autocmd BufRead,BufNewFile *.vim set filetype=vim
     autocmd FileType vim setlocal foldmethod=marker
     autocmd FileType vim inoreabbrev == ==#
+    autocmd FileType vim set tabstop=4
+    autocmd FileType vim set shiftwidth=4
+	autocmd FileType vim set expandtab
 augroup END
 " }}}
 
@@ -189,6 +192,14 @@ augroup FileType_ASM
     autocmd FileType asm colorscheme murphy
     autocmd FileType asm set tabstop=8
     autocmd FileType asm set noexpandtab
+augroup END
+" }}}
+
+" Autocmd Group for html --------------------{{{
+augroup FileType_HTML
+    autocmd!
+    autocmd FileType html set tabstop=4
+    autocmd FileType html set shiftwidth=4
 augroup END
 " }}}
 
