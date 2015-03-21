@@ -17,7 +17,7 @@ call vundle#begin()
 " Required for Vundle
 Plugin 'gmarik/Vundle.vim'
 
-" List of All vim plugins you need
+" List of All vim plugins you need ----------------{{{
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/nerdtree'
 Plugin 'klen/python-mode'
@@ -28,6 +28,7 @@ Plugin 'rjohnsondev/vim-compiler-go'
 Plugin 'dgryski/vim-godef'
 Plugin 'vim-jp/vim-go-extra'
 Plugin 'plasticboy/vim-markdown'
+" }}}
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -45,6 +46,7 @@ set modeline
 set number
 set showtabline=2
 set t_Co=256
+set backspace=2
 
 let mapleader=","
 let maplocalleader="\\"
@@ -89,7 +91,6 @@ nnoremap <F8> :TagbarToggle<cr>
 augroup filetype_python
     autocmd!
     autocmd BufRead,BufNewFile *.py set filetype=python
-    autocmd FileType python TagbarOpen
     autocmd FileType python set tabstop=4
     autocmd FileType python set shiftwidth=4
     autocmd FileType python set expandtab
@@ -117,6 +118,9 @@ augroup filetype_vim
     autocmd BufRead,BufNewFile *.vim set filetype=vim
     autocmd FileType vim setlocal foldmethod=marker
     autocmd FileType vim inoreabbrev == ==#
+    autocmd FileType vim set tabstop=4
+    autocmd FileType vim set shiftwidth=4
+	autocmd FileType vim set expandtab
 augroup END
 " }}}
 
@@ -189,6 +193,15 @@ augroup FileType_ASM
     autocmd FileType asm colorscheme murphy
     autocmd FileType asm set tabstop=8
     autocmd FileType asm set noexpandtab
+augroup END
+" }}}
+
+" Autocmd Group for html --------------------{{{
+augroup FileType_HTML
+    autocmd!
+    autocmd FileType html set tabstop=4
+    autocmd FileType html set shiftwidth=4
+    autocmd FileType html set expandtab
 augroup END
 " }}}
 
