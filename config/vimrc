@@ -89,7 +89,6 @@ nnoremap <F8> :TagbarToggle<cr>
 augroup filetype_python
     autocmd!
     autocmd BufRead,BufNewFile *.py set filetype=python
-    autocmd FileType python TagbarOpen
     autocmd FileType python set tabstop=4
     autocmd FileType python set shiftwidth=4
     autocmd FileType python set expandtab
@@ -200,6 +199,7 @@ augroup FileType_HTML
     autocmd!
     autocmd FileType html set tabstop=4
     autocmd FileType html set shiftwidth=4
+    autocmd FileType html set expandtab
 augroup END
 " }}}
 
