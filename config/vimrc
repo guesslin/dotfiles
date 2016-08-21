@@ -27,10 +27,15 @@ Plugin 'scrooloose/syntastic'
 Plugin 'rjohnsondev/vim-compiler-go'
 Plugin 'dgryski/vim-godef'
 Plugin 'vim-jp/vim-go-extra'
+Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'othree/html5.vim'
 Plugin 'mattn/webapi-vim'
 Plugin 'mattn/gist-vim'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'itchyny/lightline.vim'
 " }}}
 
 " All of your Plugins must be added before the following line
@@ -80,6 +85,7 @@ nnoremap <leader>l' ^i'<esc>$a'<esc>^
 nnoremap <leader>U viwU<esc>
 nnoremap <leader>u viwu<esc>
 nnoremap <leader>B viw<esc>bvU<esc>
+nnoremap <leader>b viwU<esc>viw<esc>bvu<esc>
 
 " normal key map
 nnoremap <space> za
@@ -163,6 +169,7 @@ augroup FileType_GO
     autocmd FileType go set noexpandtab
     autocmd FileType go set tabstop=8
     autocmd FileType go :call CheckAndLoadTags()
+    autocmd FileType go let g:go_template_autocreate = 0
     autocmd FileType go let g:tagbar_type_go = {
         \ 'ctagstype' : 'go',
         \ 'kinds'     : [
@@ -206,6 +213,7 @@ augroup END
 " Autocmd Group for html --------------------{{{
 augroup FileType_HTML
     autocmd!
+    autocmd BufRead,BufNewFile *.html set filetype=html
     autocmd FileType html set tabstop=4
     autocmd FileType html set shiftwidth=4
     autocmd FileType html set expandtab
