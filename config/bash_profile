@@ -1,0 +1,21 @@
+#!/bin/bash
+# bash_completion setting
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+	. $(brew --prefix)/etc/bash_completion
+fi
+
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+export PYENV_ROOT=/usr/local/opt/pyenv
+
+# GO PATH setting
+GOPATH=$HOME"/go"
+export GOPATH
+#PATH=$HOME"/workspace/go_appengine":$PATH:$GOPATH/bin
+PATH=$PATH:$GOPATH/bin
+export PATH
+
+# alias setting
+alias ls="ls -G"
+alias ll="ls -lA"
+alias tmux="tmux -2"
+export PATH="/usr/local/sbin:$PATH"

@@ -89,6 +89,7 @@ nnoremap <leader>b viwU<esc>viw<esc>bvu<esc>
 
 " normal key map
 nnoremap <space> za
+nnoremap <F5> :set hls!<cr>
 nnoremap <F6> :set paste!<cr>
 nnoremap <F7> :set ignorecase!<cr>
 nnoremap <F8> :TagbarToggle<cr>
@@ -169,6 +170,8 @@ augroup FileType_GO
     autocmd FileType go set noexpandtab
     autocmd FileType go set tabstop=8
     autocmd FileType go :call CheckAndLoadTags()
+    autocmd FileType go iabbrev defineCases testCases := []struct{<cr>}{<cr>{},<cr>}
+    autocmd FileType go iabbrev forCases for i, c := range testCases {<cr>}
     autocmd FileType go let g:go_template_autocreate = 0
     autocmd FileType go let g:tagbar_type_go = {
         \ 'ctagstype' : 'go',
