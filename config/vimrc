@@ -36,6 +36,7 @@ Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'itchyny/lightline.vim'
+Plugin 'leafgarland/typescript-vim'
 " }}}
 
 " All of your Plugins must be added before the following line
@@ -222,6 +223,27 @@ augroup FileType_HTML
     autocmd FileType html set expandtab
 augroup END
 " }}}
+
+" Autocmd Group for TypeScript --------------{{{{
+augroup FileType_TypeScript
+    autocmd!
+    autocmd BufRead,BufNewFile *.ts set filetype=typescript
+    autocmd FileType typescript let g:tagbar_type_typescript = {
+      \ 'ctagstype': 'typescript',
+      \ 'kinds': [
+        \ 'c:classes',
+        \ 'n:modules',
+        \ 'f:functions',
+        \ 'v:variables',
+        \ 'v:varlambdas',
+        \ 'm:members',
+        \ 'i:interfaces',
+        \ 'e:enums',
+      \ ]
+      \ }
+augroup END
+" }}}}
+
 
 " }}}
 
