@@ -26,8 +26,8 @@ fi
 mkdir -p /var/spool/rsyslog
 
 # Replace variables
-sed -i "s/LOGGLY_AUTH_TOKEN/$LOGGLY_AUTH_TOKEN/" /etc/rsyslog.conf
-sed -i "s/LOGGLY_TAG/$LOGGLY_TAG/" /etc/rsyslog.conf
+sed -i "s/LOGGLY_AUTH_TOKEN/$LOGGLY_AUTH_TOKEN/" /etc/rsyslog.d/22-loggly.conf
+sed -i "s/LOGGLY_TAG/$LOGGLY_TAG/" /etc/rsyslog.d/22-loggly.conf
 
 # Run RSyslog daemon
 exec /usr/sbin/rsyslogd -n
