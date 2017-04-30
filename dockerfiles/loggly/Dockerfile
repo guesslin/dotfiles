@@ -2,12 +2,10 @@ FROM buildpack-deps:xenial-scm
 
 MAINTAINER Lin, Yu-Han <guesslin1986@gmail.com>
 
-RUN apt-get update && apt-get install -y rsyslog-gnutls && \
+RUN apt-get update && apt-get install -y rsyslog && \
     rm -rf /var/lib/apt/lists/* \
     rm -f /etc/rsyslog.conf && \
-    mkdir -pv /etc/rsyslog.d/keys/ca.d && \
-    cd /etc/rsyslog.d/keys/ca.d/ && \
-    curl -O https://logdog.loggly.com/media/logs-01.loggly.com_sha12.crt
+    rm -f /etc/rsyslog.d/50-default.conf
 
 ADD rsyslog.conf /etc/rsyslog.conf
 ADD 22-loggly.conf /etc/rsyslog.d/22-loggly.conf
