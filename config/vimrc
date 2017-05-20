@@ -23,7 +23,6 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'klen/python-mode'
 Plugin 'mbriggs/mark.vim'
 Plugin 'fatih/vim-go'
-Plugin 'scrooloose/syntastic'
 Plugin 'rjohnsondev/vim-compiler-go'
 Plugin 'dgryski/vim-godef'
 Plugin 'vim-jp/vim-go-extra'
@@ -37,6 +36,9 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'itchyny/lightline.vim'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'vim-syntastic/syntastic'
 " }}}
 
 " All of your Plugins must be added before the following line
@@ -228,6 +230,11 @@ augroup END
 augroup FileType_TypeScript
     autocmd!
     autocmd BufRead,BufNewFile *.ts set filetype=typescript
+    autocmd BufRead,BufNewFile *.js set filetype=typescript
+    autocmd FileType typescript set tabstop=4
+    autocmd FileType typescript set shiftwidth=4
+    autocmd FileType typescript set expandtab
+    autocmd FileType typescript iabbrev and &&
     autocmd FileType typescript let g:tagbar_type_typescript = {
       \ 'ctagstype': 'typescript',
       \ 'kinds': [
@@ -244,6 +251,15 @@ augroup FileType_TypeScript
 augroup END
 " }}}}
 
+" Autocmd Group for Bash --------------{{{{
+augroup FileType_Bash
+    autocmd!
+    autocmd BufRead,BufNewFile *.sh set filetype=sh
+    autocmd FileType sh set tabstop=2
+    autocmd FileType sh set shiftwidth=2
+    autocmd FileType sh set expandtab
+augroup END
+" }}}}
 
 " }}}
 
