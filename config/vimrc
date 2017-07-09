@@ -1,48 +1,37 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
-let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
-if !filereadable(vundle_readme)
-    echo "Installing Vundle.."
-    echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/Vundle.vim ~/.vim/bundle/Vundle.vim
-    let iCanHazVundle=0
+" Load vim-plug
+if empty(glob("~/.vim/autoload/plug.vim"))
+    execute '!mkdir -p ~/.vim/plugged'
+    execute '!mkdir -p ~/.vim/autoload'
+    execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
 endif
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" Required for Vundle
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/plugged')
 
 " List of All vim plugins you need ----------------{{{
-Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/nerdtree'
-Plugin 'klen/python-mode'
-Plugin 'mbriggs/mark.vim'
-Plugin 'fatih/vim-go'
-Plugin 'rjohnsondev/vim-compiler-go'
-Plugin 'dgryski/vim-godef'
-Plugin 'vim-jp/vim-go-extra'
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'othree/html5.vim'
-Plugin 'mattn/webapi-vim'
-Plugin 'mattn/gist-vim'
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'itchyny/lightline.vim'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'vim-syntastic/syntastic'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdtree'
+Plug 'klen/python-mode'
+Plug 'mbriggs/mark.vim'
+Plug 'fatih/vim-go'
+Plug 'rjohnsondev/vim-compiler-go'
+Plug 'dgryski/vim-godef'
+Plug 'vim-jp/vim-go-extra'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'othree/html5.vim'
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'itchyny/lightline.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'vim-syntastic/syntastic'
 " }}}
 
 " All of your Plugins must be added before the following line
-call vundle#end()
+call plug#end()
 
 " General VIMRC
 
