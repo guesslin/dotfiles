@@ -95,7 +95,7 @@ nnoremap <F8> :TagbarToggle<cr>
 augroup filetype_python
     autocmd!
     autocmd BufRead,BufNewFile *.py set filetype=python
-    autocmd FileType python TagbarOpen
+    autocmd FileType python :call CheckWidthToOpenTagbar()
     autocmd FileType python set tabstop=4
     autocmd FileType python set shiftwidth=4
     autocmd FileType python set expandtab
@@ -158,7 +158,7 @@ augroup END
 augroup FileType_GO
     autocmd!
     autocmd BufRead,BufNewFile *.go set filetype=go
-    autocmd FileType go TagbarOpen
+    autocmd FileType go :call CheckWidthToOpenTagbar()
     autocmd FileType go set noexpandtab
     autocmd FileType go set tabstop=8
     autocmd FileType go :call CheckAndLoadTags()
@@ -259,6 +259,14 @@ augroup END
 function! CheckAndLoadTags()
     if file_readable("./tags")
         set tag=tags
+    endif
+endfunction
+" }}}
+
+" Function CheckAndLoadTags ---------- {{{
+function! CheckWidthToOpenTagbar()
+    if winwidth(0) > 120
+        TagbarOpen
     endif
 endfunction
 " }}}
