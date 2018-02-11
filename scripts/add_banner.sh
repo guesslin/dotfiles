@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# use figlet to generate Banner string
+#
 
 banner_file="banner.txt"
 comment_char="#"
