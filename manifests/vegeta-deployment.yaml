@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolbox-vegeta
+  labels:
+    app: toolbox-vegeta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toolbox-vegeta
+  template:
+    metadata:
+      labels:
+        app: toolbox-vegeta
+    spec:
+      containers:
+      - name: vegeta
+        image: guesslin/vegeta:latest
+        command: ['bash', '-c', 'sleep inf']
+      restartPolicy: Always

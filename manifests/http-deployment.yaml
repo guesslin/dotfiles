@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolbox-http
+  labels:
+    app: toolbox-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toolbox-http
+  template:
+    metadata:
+      labels:
+        app: toolbox-http
+    spec:
+      containers:
+      - name: vegeta
+        image: guesslin/gin-http:latest
+      restartPolicy: Always
