@@ -2,20 +2,16 @@
 if empty(glob("~/.vim/autoload/plug.vim"))
     execute '!mkdir -p ~/.vim/plugged'
     execute '!mkdir -p ~/.vim/autoload'
-    execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim'
 endif
 
 call plug#begin('~/.vim/plugged')
 
 " List of All vim plugins you need ----------------{{{
 Plug 'majutsushi/tagbar'
-Plug 'scrooloose/nerdtree'
-Plug 'klen/python-mode'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Plug 'python-mode/python-mode', { 'for': 'python' }
 Plug 'mbriggs/mark.vim'
-Plug 'fatih/vim-go'
-Plug 'rjohnsondev/vim-compiler-go'
-Plug 'dgryski/vim-godef'
-Plug 'vim-jp/vim-go-extra'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'othree/html5.vim'
@@ -24,13 +20,29 @@ Plug 'mattn/gist-vim'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'itchyny/lightline.vim'
-Plug 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'airblade/vim-gitgutter'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'vim-syntastic/syntastic'
+Plug 'rjohnsondev/vim-compiler-go'
+Plug 'dgryski/vim-godef'
+Plug 'vim-jp/vim-go-extra'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+"Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+"Plug 'stamblerre/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'elzr/vim-json'
+Plug 'tpope/vim-fugitive'
+Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+Plug 'sebdah/vim-delve'
+Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+Plug 'docker/docker'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'codota/tabnine-vim'
+Plug 'jasontbradshaw/pigeon.vim'
+Plug 'rust-lang/rust.vim'
 " }}}
 
-" All of your Plugins must be added before the following line
 call plug#end()
 
 " General VIMRC
@@ -44,13 +56,31 @@ set foldlevelstart=0
 set laststatus=2
 set modeline
 set number
+set hls
 set showtabline=2
 set t_Co=256
 set backspace=2
+" set clipboard=unnamed
+" For airblade/vim-gitgutter
+set updatetime=100
+" For increase search
+set incsearch
 
 let mapleader=","
 let maplocalleader="\\"
+" golang related configuration
+let g:golang_goroot="/usr/local/go"
+" let g:go_def_mode='gopls'
+" let g:go_info_mode='gopls'
+let g:ycm_global_ycm_extra_conf="~/.ycm_extra_conf.py"
+" make gist post be private by default
+let g:gist_post_private = 1
 colorscheme wombat256
+" set vim background transparent
+" hi Normal guibg=NONE ctermbg=NONE
+" let g:gitgutter_override_sign_column_highlight = 0
+" highlight SignColumn ctermbg=Yellow
+" highlight SignColumn guibg=Yellow
 
 " Vim Statusline --------------- {{{
 set statusline=%f
@@ -71,13 +101,19 @@ set statusline+=\[%p%%\]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lbl
+nnoremap <leader>a" I"<esc>A"<esc>
 nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lbl
+nnoremap <leader>a' I'<esc>A'<esc>
 nnoremap <leader>l" ^i"<esc>$a"<esc>^
 nnoremap <leader>l' ^i'<esc>$a'<esc>^
 nnoremap <leader>U viwU<esc>
 nnoremap <leader>u viwu<esc>
 nnoremap <leader>B viw<esc>bvU<esc>
 nnoremap <leader>b viwU<esc>viw<esc>bvu<esc>
+nnoremap <leader>g :GitGutterToggle<cr>
+nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
+nnoremap <Leader>cl :set colorcolumn=0<CR>
+nnoremap <Leader>sl :set colorcolumn=80<CR>
 
 " normal key map
 nnoremap <space> za
@@ -85,86 +121,34 @@ nnoremap <F5> :set hls!<cr>
 nnoremap <F6> :set paste!<cr>
 nnoremap <F7> :set ignorecase!<cr>
 nnoremap <F8> :TagbarToggle<cr>
+nnoremap <F9> :set spell spelllang=en_us<cr>
+nnoremap <F10> :set spell!<cr>
 
 " }}}
 
 
 " Autocmd Groups -------------------- {{{
 
-" Autocmd Group for python ---------- {{{
-augroup filetype_python
-    autocmd!
-    autocmd BufRead,BufNewFile *.py set filetype=python
-    autocmd FileType python :call CheckWidthToOpenTagbar()
-    autocmd FileType python set tabstop=4
-    autocmd FileType python set shiftwidth=4
-    autocmd FileType python set expandtab
-    autocmd FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-    autocmd FileType python :call CheckAndLoadTags()
-    autocmd FileType python iabbrev pythonHead #!/usr/bin/env python<cr># -*- coding: utf-8 -*-<cr>
-    autocmd FileType python let g:pymode_rope_lookup_project=0
-    autocmd FileType python setlocal colorcolumn=0
-augroup END
-" }}}
-
-" Autocmd Group for markdown ---------- {{{
-augroup filetype_markdown
-    autocmd!
-    autocmd BufRead,BufNewFile *.md set ft=mkd
-    autocmd BufRead,BufNewFile *.mkd set ft=mkd
-    autocmd FileType mkd onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
-    autocmd FileType mkd onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
-augroup END
-" }}}
-
-" Autocmd Group for Vimscript file setting ----------------------- {{{
-augroup filetype_vim
-    autocmd!
-    autocmd BufRead,BufNewFile *.vim set filetype=vim
-    autocmd FileType vim setlocal foldmethod=marker
-    autocmd FileType vim inoreabbrev == ==#
-    autocmd FileType vim set tabstop=4
-    autocmd FileType vim set shiftwidth=4
-    autocmd FileType vim set expandtab
-augroup END
-" }}}
-
-" Autocmd Group for arduion pde ---------- {{{
-augroup filetype_pde
-    autocmd!
-augroup END
-" }}}
-
-" Autocmd Group for Nmap NSE script --------------------- {{{
-augroup FileType_nse
-    autocmd!
-    autocmd BufRead,BufNewFile *.nse set filetype=lua
-augroup END
-" }}}
-
-" Autocmd Group for YARA ---------------------{{{
-augroup FileType_Yara
-    autocmd!
-    autocmd BufNewFile,BufRead *.yara set filetype=yara
-    autocmd BufNewFile,BufRead *.yar set filetype=yara
-    autocmd FileType yara set tabstop=4
-    autocmd FileType yara set shiftwidth=4
-    autocmd FileType yara set expandtab
-    autocmd FileType yara set smartindent cinwords=strings:,condition:
-augroup END
-" }}}
-
-" Autocmd Group for golang --------------------{{{
+" Autocmd Group for golang -------------------- {{{
 augroup FileType_GO
     autocmd!
-    autocmd BufRead,BufNewFile *.go set filetype=go
-    autocmd FileType go :call CheckWidthToOpenTagbar()
-    autocmd FileType go set noexpandtab
-    autocmd FileType go set tabstop=8
+    autocmd BufRead,BufNewFile *.go setlocal filetype=go
+    "autocmd FileType go :call CheckWidthToOpenTagbar()
     autocmd FileType go :call CheckAndLoadTags()
-    autocmd FileType go iabbrev defineCases testCases := []struct{<cr>}{<cr>{},<cr>}
-    autocmd FileType go iabbrev forCases for i, c := range testCases {<cr>}
+    autocmd FileType go setlocal noexpandtab
+    autocmd FileType go setlocal tabstop=8
     autocmd FileType go let g:go_template_autocreate = 0
+    autocmd FileType go nnoremap <leader>grt :GoCoverage<cr>
+    autocmd FileType go nnoremap <leader>grc :GoCoverageClear<cr>
+    autocmd FileType go inoremap <buffer> ;; <C-O>/%PLACEHOLDER%<cr><C-O>c13l
+    autocmd FileType go nnoremap <buffer> ;; /%PLACEHOLDER%<cr>c13l
+    autocmd FileType go imap <buffer> ;test <C-O>mzfunc Test%PLACEHOLDER%(t *testing.T) {<cr>%PLACEHOLDER%<cr>}<cr><C-O>'z;;
+    autocmd FileType go imap <buffer> ;define <C-O>mztestCases := []struct{<cr>%PLACEHOLDER%<cr>}{<cr>{},<cr>}<cr><C-O>'z;;
+    autocmd FileType go imap <buffer> ;forc <C-O>mzfor _, c := range testCases {<cr>%PLACEHOLDER%<cr>}<cr><C-O>'z;;
+    autocmd FileType go imap <buffer> ;rf <C-O>mzfunc (%PLACEHOLDER% %PLACEHOLDER%) %PLACEHOLDER%(%PLACEHOLDER%) %PLACEHOLDER% {<cr>}<cr><C-O>'z;;
+    autocmd FileType go let g:go_def_mode='gopls'
+    autocmd FileType go let g:go_info_mode='gopls'
+    autocmd FileType go let g:go_fmt_command = "goimports"
     autocmd FileType go let g:tagbar_type_go = {
         \ 'ctagstype' : 'go',
         \ 'kinds'     : [
@@ -195,35 +179,98 @@ augroup FileType_GO
 augroup END
 " }}}
 
-" Autocmd Group for ASM ----------------------{{{
+" Autocmd Group for python ---------- {{{
+augroup filetype_python
+    autocmd!
+    autocmd BufRead,BufNewFile *.py set filetype=python
+    autocmd FileType python :call CheckAndLoadTags()
+    autocmd FileType python :call CheckWidthToOpenTagbar()
+    autocmd FileType python setlocal tabstop=4
+    autocmd FileType python setlocal shiftwidth=4
+    autocmd FileType python setlocal expandtab
+    autocmd FileType python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+    autocmd FileType python iabbrev pythonHead #!/usr/bin/env python<cr># -*- coding: utf-8 -*-<cr>
+    autocmd FileType python let g:pymode_rope_lookup_project=0
+    autocmd FileType python setlocal colorcolumn=0
+augroup END
+" }}}
+
+" Autocmd Group for markdown ---------- {{{
+augroup filetype_markdown
+    autocmd!
+    autocmd BufRead,BufNewFile *.md set ft=mkd
+    autocmd BufRead,BufNewFile *.mkd set ft=mkd
+    autocmd FileType mkd onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
+    autocmd FileType mkd onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+augroup END
+" }}}
+
+" Autocmd Group for Vimscript file setting ----------------------- {{{
+augroup filetype_vim
+    autocmd!
+    autocmd BufRead,BufNewFile *.vim setlocal filetype=vim
+    autocmd FileType vim setlocal foldmethod=marker
+    " autocmd FileType vim setlocal inoreabbrev == ==#
+    autocmd FileType vim setlocal tabstop=4
+    autocmd FileType vim setlocal shiftwidth=4
+    autocmd FileType vim setlocal expandtab
+augroup END
+" }}}
+
+" Autocmd Group for arduion pde ---------- {{{
+augroup filetype_pde
+    autocmd!
+augroup END
+" }}}
+
+" Autocmd Group for Nmap NSE script --------------------- {{{
+augroup FileType_nse
+    autocmd!
+    autocmd BufRead,BufNewFile *.nse setlocal filetype=lua
+augroup END
+" }}}
+
+" Autocmd Group for YARA --------------------- {{{
+augroup FileType_Yara
+    autocmd!
+    autocmd BufNewFile,BufRead *.yara setlocal filetype=yara
+    autocmd BufNewFile,BufRead *.yar setlocal filetype=yara
+    autocmd FileType yara setlocal tabstop=4
+    autocmd FileType yara setlocal shiftwidth=4
+    autocmd FileType yara setlocal expandtab
+    autocmd FileType yara setlocal smartindent cinwords=strings:,condition:
+augroup END
+" }}}
+
+" Autocmd Group for ASM ---------------------- {{{
 augroup FileType_ASM
     autocmd!
-    autocmd BufRead,BufNewFile *.asm set filetype=asm
+    autocmd BufRead,BufNewFile *.asm setlocal filetype=asm
     autocmd FileType asm colorscheme pychimp
-    autocmd FileType asm set tabstop=8
-    autocmd FileType asm set noexpandtab
+    autocmd FileType asm setlocal tabstop=8
+    autocmd FileType asm setlocal noexpandtab
 augroup END
 " }}}
 
-" Autocmd Group for html --------------------{{{
+" Autocmd Group for html -------------------- {{{
 augroup FileType_HTML
     autocmd!
-    autocmd BufRead,BufNewFile *.html set filetype=html
-    autocmd FileType html set tabstop=4
-    autocmd FileType html set shiftwidth=4
-    autocmd FileType html set expandtab
+    autocmd BufRead,BufNewFile *.html setlocal filetype=html
+    autocmd FileType html setlocal tabstop=4
+    autocmd FileType html setlocal shiftwidth=4
+    autocmd FileType html setlocal expandtab
 augroup END
 " }}}
 
-" Autocmd Group for TypeScript --------------{{{{
+" Autocmd Group for TypeScript -------------- {{{
 augroup FileType_TypeScript
     autocmd!
-    autocmd BufRead,BufNewFile *.ts set filetype=typescript
-    autocmd BufRead,BufNewFile *.js set filetype=typescript
-    autocmd FileType typescript set tabstop=4
-    autocmd FileType typescript set shiftwidth=4
-    autocmd FileType typescript set expandtab
-    autocmd FileType typescript iabbrev and &&
+    autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
+    autocmd BufRead,BufNewFile *.js setlocal filetype=typescript
+    autocmd FileType typescript setlocal tabstop=4
+    autocmd FileType typescript setlocal shiftwidth=4
+    autocmd FileType typescript setlocal expandtab
+    " autocmd FileType typescript iabbrev and &&
     autocmd FileType typescript let g:tagbar_type_typescript = {
       \ 'ctagstype': 'typescript',
       \ 'kinds': [
@@ -238,22 +285,54 @@ augroup FileType_TypeScript
       \ ]
       \ }
 augroup END
-" }}}}
+" }}}
 
-" Autocmd Group for Bash --------------{{{{
+" Autocmd Group for Bash -------------- {{{
 augroup FileType_Bash
     autocmd!
-    autocmd BufRead,BufNewFile *.sh set filetype=sh
-    autocmd FileType sh set tabstop=2
-    autocmd FileType sh set shiftwidth=2
-    autocmd FileType sh set expandtab
+    autocmd BufRead,BufNewFile *.sh setlocal filetype=sh
+    autocmd FileType sh setlocal tabstop=2
+    autocmd FileType sh setlocal shiftwidth=2
+    autocmd FileType sh setlocal expandtab
 augroup END
-" }}}}
+" }}}
+
+" Autocmd Group for CPP ----------- {{{
+augroup FileType_CPP
+    autocmd!
+    autocmd BufRead,BufNewFile *.c setlocal filetype=cpp
+    autocmd BufRead,BufNewFile *.cc setlocal filetype=cpp
+    autocmd BufRead,BufNewFile *.cpp setlocal filetype=cpp
+    autocmd BufRead,BufNewFile *.h setlocal filetype=cpp
+    autocmd BufRead,BufNewFile *.hpp setlocal filetype=cpp
+    autocmd FileType cpp setlocal colorcolumn=80
+augroup END
+" }}}
+
+" Autocmd Group for YAML -------------- {{{
+augroup FileType_YAML
+    autocmd!
+    autocmd BufRead,BufNewFile *.yaml setlocal filetype=yaml
+    autocmd BufRead,BufNewFile *.yml setlocal filetype=yaml
+    autocmd FileType yaml setlocal tabstop=4
+    autocmd FileType yaml setlocal sts=4
+    autocmd FileType yaml setlocal shiftwidth=4
+    autocmd FileType yaml setlocal expandtab
+    autocmd FileType yaml setlocal cursorcolumn
+augroup END
+" }}}
+
+" Autocmd Group for PEG ---------- {{{
+augroup filetype_pigeon
+    autocmd!
+    autocmd BufRead,BufNewFile *.peg set filetype=pigeon
+augroup END
+" }}}
 
 " }}}
 
 
-" User defined Functions ------------- {{{
+" User defined Functions ------------------ {{{
 
 " Function CheckAndLoadTags ---------- {{{
 function! CheckAndLoadTags()
@@ -263,12 +342,15 @@ function! CheckAndLoadTags()
 endfunction
 " }}}
 
-" Function CheckAndLoadTags ---------- {{{
+" Function CheckWidthToOpenTagbar ---- {{{
 function! CheckWidthToOpenTagbar()
     if winwidth(0) > 120
         TagbarOpen
     endif
 endfunction
+" }}}
+
+" Function ChangeFunctionReceiver ---- {{{
 " }}}
 
 " }}}
