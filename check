@@ -1,0 +1,11 @@
+#!/bin/bash
+
+input="./.passing"
+while IFS= read -r line
+do
+  echo "input is $line";
+  if [[ "$line" == "false" ]]; then
+    exit 1;
+  fi
+done < "$input"
+
